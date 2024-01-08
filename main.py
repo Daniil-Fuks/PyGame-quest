@@ -44,16 +44,6 @@ class Player(pygame.sprite.Sprite):
         self.vx = 0
         self.vy = 0
 
-    def move(self, direction):
-        if direction == "w":
-            self.vy = -5
-        if direction == "s":
-            self.vy = 5
-        if direction == "a":
-            self.vx = -5
-        if direction == "d":
-            self.vx = 5
-
     def update(self):
         self.rect = self.rect.move(self.vx, 0)
         self.rect = self.rect.move(0, self.vy)
@@ -90,13 +80,13 @@ def main():
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
-                    player.move('w')
+                    player.vy = -5
                 if event.key == pygame.K_a:
-                    player.move('a')
+                    player.vx = -5
                 if event.key == pygame.K_s:
-                    player.move('s')
+                    player.vy = 5
                 if event.key == pygame.K_d:
-                    player.move('d')
+                    player.vx = 5
             if event.type == pygame.KEYUP:
                 player.vx = 0
                 player.vy = 0
