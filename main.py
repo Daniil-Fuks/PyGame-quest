@@ -1,6 +1,6 @@
 import os
-import random
 import sys
+
 import pygame
 
 pygame.init()
@@ -32,18 +32,6 @@ def load_image(name, colorkey=None):
     return image
 
 
-def move(direction):
-    global Moving_Up, Moving_Left, Moving_Right, Moving_Down
-    if direction == "w":
-        Moving_Up = True
-    if direction == "a":
-        Moving_Left = True
-    if direction == "s":
-        Moving_Down = True
-    if direction == "d":
-        Moving_Right = True
-
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, radius, x, y):
         super().__init__(all_sprites)
@@ -53,25 +41,23 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 500
         self.rect.y = 100
-        self.vx = 5
-        self.vy = 5
+        self.vx = 0
+        self.vy = 0
+
+    def move(self, direction):
+        if direction == "w":
+            self.vy = -5
+        if direction == "s":
+            self.vy = 5
+        if direction == "a":
+            self.vx = -5
+        if direction == "d":
+            self.vx = 5
 
     def update(self):
-        global Moving_Up, Moving_Left, Moving_Right, Moving_Down
+        self.rect = self.rect.move(self.vx, 0)
+        self.rect = self.rect.move(0, self.vy)
 
-        if pygame.sprite.spritecollideany(self, horizontal_borders):
-            self.vy = 0
-        if pygame.sprite.spritecollideany(self, vertical_borders):
-            self.vx = 0
-
-        if Moving_Up:
-            self.rect = self.rect.move(0, -self.vy)
-        if Moving_Down:
-            self.rect = self.rect.move(0, self.vy)
-        if Moving_Right:
-            self.rect = self.rect.move(self.vx, 0)
-        if Moving_Left:
-            self.rect = self.rect.move(-self.vx, 0)
 
 class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
@@ -92,7 +78,7 @@ def main():
     Border(5, height - 5, width - 5, height - 5)
     Border(5, 5, 5, height - 5)
     Border(width - 5, 5, width - 5, height - 5)
-    Player(20, 100, 100)
+    player = Player(20, 100, 100)
     running = True
     fps = 60
     clock = pygame.time.Clock()
@@ -104,22 +90,16 @@ def main():
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
-                    move('w')
+                    player.move('w')
                 if event.key == pygame.K_a:
-                    move('a')
+                    player.move('a')
                 if event.key == pygame.K_s:
-                    move('s')
+                    player.move('s')
                 if event.key == pygame.K_d:
-                    move('d')
+                    player.move('d')
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_w:
-                    Moving_Up = False
-                if event.key == pygame.K_a:
-                    Moving_Left = False
-                if event.key == pygame.K_s:
-                    Moving_Down = False
-                if event.key == pygame.K_d:
-                    Moving_Right = False
+                player.vx = 0
+                player.vy = 0
 
         all_sprites.draw(screen)
         all_sprites.update()
