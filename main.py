@@ -4,10 +4,6 @@ import sys
 import pygame
 
 pygame.init()
-Moving_Up = False
-Moving_Down = False
-Moving_Right = False
-Moving_Left = False
 pygame.display.set_caption("PyGame Quest")
 size = width, height = 800, 400
 screen = pygame.display.set_mode(size)
@@ -63,17 +59,19 @@ class Border(pygame.sprite.Sprite):
 
 
 def main():
-    global Moving_Up, Moving_Left, Moving_Right, Moving_Down
     Border(5, 5, width - 5, 5)
     Border(5, height - 5, width - 5, height - 5)
     Border(5, 5, 5, height - 5)
     Border(width - 5, 5, width - 5, height - 5)
     player = Player(20, 100, 100)
+    bg = pygame.image.load('data/Grass.png')
+    bg = pygame.transform.scale(bg, (800, 400))
+
     running = True
     fps = 60
     clock = pygame.time.Clock()
     while running:
-        screen.fill((255, 255, 255))
+        screen.blit(bg, (0, 0))
         event_key = None
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -88,8 +86,14 @@ def main():
                 if event.key == pygame.K_d:
                     player.vx = 5
             if event.type == pygame.KEYUP:
-                player.vx = 0
-                player.vy = 0
+                if event.key == pygame.K_w:
+                    player.vy = 0
+                if event.key == pygame.K_a:
+                    player.vx = 0
+                if event.key == pygame.K_s:
+                    player.vy = 0
+                if event.key == pygame.K_d:
+                    player.vx = 0
 
         all_sprites.draw(screen)
         all_sprites.update()
