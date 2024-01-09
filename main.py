@@ -41,9 +41,11 @@ class Player(pygame.sprite.Sprite):
         self.vy = 0
 
     def update(self):
-        self.rect = self.rect.move(self.vx, 0)
-        self.rect = self.rect.move(0, self.vy)
-
+        self.rect = self.rect.move(self.vx, self.vy)
+        if pygame.sprite.spritecollideany(self, horizontal_borders):
+            self.vy = 0
+        if pygame.sprite.spritecollideany(self, vertical_borders):
+            self.vx = 0
 
 class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
