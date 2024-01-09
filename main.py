@@ -10,6 +10,7 @@ screen = pygame.display.set_mode(size)
 all_sprites = pygame.sprite.Group()
 horizontal_borders = pygame.sprite.Group()
 vertical_borders = pygame.sprite.Group()
+trees = pygame.sprite.Group()
 
 
 def load_image(name, colorkey=None):
@@ -45,6 +46,9 @@ class Player(pygame.sprite.Sprite):
             self.vy = 0
         if pygame.sprite.spritecollideany(self, vertical_borders):
             self.vx = 0
+        if pygame.sprite.spritecollideany(self, trees):
+            self.vx = 0
+            self.vy = 0
 
 
 class Border(pygame.sprite.Sprite):
@@ -84,6 +88,11 @@ def main():
     Border(width - 5, 5, width - 5, height - 5)
     player = Player(50, 50, 100, 100)
     tree = Tree(100, 100, 500, 300)
+    tree2 = Tree(100, 100, 100, 300)
+    all_sprites.add(tree)
+    trees.add(tree)
+    all_sprites.add(tree2)
+    trees.add(tree2)
     bg = pygame.image.load('data/Grass.png')
     bg = pygame.transform.scale(bg, (800, 400))
 
