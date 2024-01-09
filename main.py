@@ -29,14 +29,13 @@ def load_image(name, colorkey=None):
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, radius, x, y):
+    def __init__(self, s1, s2, x, y):
         super().__init__(all_sprites)
-        self.radius = radius
         self.image = load_image("DeftSorceress.png")
-        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
-        self.rect.x = 500
-        self.rect.y = 100
+        self.rect.x = x
+        self.rect.y = y
         self.vx = 0
         self.vy = 0
 
@@ -62,14 +61,13 @@ class Border(pygame.sprite.Sprite):
 
 
 class Tree(pygame.sprite.Sprite):
-    def __init__(self, radius, x, y):
+    def __init__(self, s1, s2, x, y):
         super().__init__(all_sprites)
-        self.radius = radius
         self.image = load_image("Big Green Tree.png")
-        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
-        self.rect.x = 500
-        self.rect.y = 100
+        self.rect.x = x
+        self.rect.y = y
 
     # def update(self):
     #     self.rect = self.rect.move(self.vx, self.vy)
@@ -84,8 +82,8 @@ def main():
     Border(5, height - 5, width - 5, height - 5)
     Border(5, 5, 5, height - 5)
     Border(width - 5, 5, width - 5, height - 5)
-    player = Player(20, 100, 100)
-    tree = Tree(10, 100, 100)
+    player = Player(50, 50, 100, 100)
+    tree = Tree(100, 100, 500, 300)
     bg = pygame.image.load('data/Grass.png')
     bg = pygame.transform.scale(bg, (800, 400))
 
