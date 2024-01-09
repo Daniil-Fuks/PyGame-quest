@@ -73,22 +73,33 @@ class Tree(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-    # def update(self):
-    #     self.rect = self.rect.move(self.vx, self.vy)
-    #     if pygame.sprite.spritecollideany(self, horizontal_borders):
-    #         self.vy = 0
-    #     if pygame.sprite.spritecollideany(self, vertical_borders):
-    #         self.vx = 0
+
+class Thin_Tree(pygame.sprite.Sprite):
+    def __init__(self, s1, s2, x, y):
+        super().__init__(all_sprites)
+        self.image = load_image("Thin Tree.png")
+        self.image = pygame.transform.scale(self.image, (s1, s2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
 
 def level_1():
-    player = Player(50, 50, 100, 100)
+    player = Player(50, 50, 375, 300)
     tree = Tree(150, 150, 500, 150)
+    tree3 = Tree(150, 150, 130, 140)
     tree2 = Tree(70, 70, 100, 300)
+    tree4 = Thin_Tree(60, 100, 700, 100)
+    tree5 = Thin_Tree(60, 100, 680, 170)
+    tree6 = Thin_Tree(60, 100, 700, 300)
     all_sprites.add(tree)
     trees.add(tree)
     all_sprites.add(tree2)
     trees.add(tree2)
+    all_sprites.add(tree3)
+    trees.add(tree3)
+    all_sprites.add(tree4)
+    trees.add(tree4)
     return player
 
 
