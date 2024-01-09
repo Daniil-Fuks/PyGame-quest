@@ -85,6 +85,9 @@ class Thin_Tree(pygame.sprite.Sprite):
 
 
 def level_1():
+    bg = pygame.image.load('data/Grass.png')
+    bg = pygame.transform.scale(bg, (800, 400))
+    screen.blit(bg, (0, 0))
     player = Player(50, 50, 375, 300)
     tree = Tree(150, 150, 500, 150)
     tree3 = Tree(150, 150, 130, 140)
@@ -104,18 +107,29 @@ def level_1():
 
 
 def main():
+    game_state = "start_menu"
     Border(5, 5, width - 5, 5)
     Border(5, height - 5, width - 5, height - 5)
     Border(5, 5, 5, height - 5)
     Border(width - 5, 5, width - 5, height - 5)
     player = level_1()
-    bg = pygame.image.load('data/Grass.png')
-    bg = pygame.transform.scale(bg, (800, 400))
+
+    def draw_start_menu():
+        screen.fill((0, 0, 0))
+        font = pygame.font.SysFont('arial', 40)
+        title = font.render('My Game', True, (255, 255, 255))
+        start_button = font.render('Start', True, (255, 255, 255))
+        screen.blit(title,
+                    (screen.get_width() / 2 - title.get_width() / 2, screen.get_height() / 2 - title.get_height() / 2))
+        screen.blit(start_button, (
+            screen.get_width() / 2 - start_button.get_width() / 2,
+            screen.get_height() / 2 + start_button.get_height() / 2))
+        pygame.display.update()
+
     running = True
     fps = 60
     clock = pygame.time.Clock()
     while running:
-        screen.blit(bg, (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -137,10 +151,21 @@ def main():
                     player.vy = 0
                 if event.key == pygame.K_d:
                     player.vx = 0
+        if game_state == "start_menu":
+            draw_start_menu()
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_SPACE]:
+                player_x = 200
+                player_y = 400
+                game_state = "game"
+                game_over = False
 
-        all_sprites.draw(screen)
-        all_sprites.update()
-
+        if game_state == "game":
+                bg = pygame.image.load('data/Grass.png')
+                bg = pygame.transform.scale(bg, (800, 400))
+                screen.blit(bg, (0, 0))
+                all_sprites.draw(screen)
+                all_sprites.update()
         clock.tick(fps)
         pygame.display.flip()
     pygame.quit()
