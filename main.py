@@ -81,27 +81,30 @@ class Tree(pygame.sprite.Sprite):
     #         self.vx = 0
 
 
+def level_1():
+    player = Player(50, 50, 100, 100)
+    tree = Tree(150, 150, 500, 150)
+    tree2 = Tree(70, 70, 100, 300)
+    all_sprites.add(tree)
+    trees.add(tree)
+    all_sprites.add(tree2)
+    trees.add(tree2)
+    return player
+
+
 def main():
     Border(5, 5, width - 5, 5)
     Border(5, height - 5, width - 5, height - 5)
     Border(5, 5, 5, height - 5)
     Border(width - 5, 5, width - 5, height - 5)
-    player = Player(50, 50, 100, 100)
-    tree = Tree(100, 100, 500, 300)
-    tree2 = Tree(100, 100, 100, 300)
-    all_sprites.add(tree)
-    trees.add(tree)
-    all_sprites.add(tree2)
-    trees.add(tree2)
+    player = level_1()
     bg = pygame.image.load('data/Grass.png')
     bg = pygame.transform.scale(bg, (800, 400))
-
     running = True
     fps = 60
     clock = pygame.time.Clock()
     while running:
         screen.blit(bg, (0, 0))
-        event_key = None
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
