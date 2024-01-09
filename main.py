@@ -11,6 +11,9 @@ all_sprites = pygame.sprite.Group()
 horizontal_borders = pygame.sprite.Group()
 vertical_borders = pygame.sprite.Group()
 trees = pygame.sprite.Group()
+portal_1 = pygame.sprite.Group()
+portal_2 = pygame.sprite.Group()
+portal_3 = pygame.sprite.Group()
 
 
 def load_image(name, colorkey=None):
@@ -74,36 +77,50 @@ class Tree(pygame.sprite.Sprite):
         self.rect.y = y
 
 
-class Thin_Tree(pygame.sprite.Sprite):
+class Bush(pygame.sprite.Sprite):
     def __init__(self, s1, s2, x, y):
         super().__init__(all_sprites)
-        self.image = load_image("Thin Tree.png")
+        self.image = load_image("bush.png")
         self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
 
+class Portal(pygame.sprite.Sprite):
+    def __init__(self, s1, s2, x, y):
+        super().__init__(all_sprites)
+        self.image = load_image("portal.png")
+        self.image = pygame.transform.scale(self.image, (s1, s2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+
 def level_1():
-    bg = pygame.image.load('data/Grass.png')
-    bg = pygame.transform.scale(bg, (800, 400))
-    screen.blit(bg, (0, 0))
     player = Player(50, 50, 375, 300)
-    tree = Tree(150, 150, 500, 150)
-    tree3 = Tree(150, 150, 130, 140)
-    tree2 = Tree(70, 70, 100, 300)
-    tree4 = Thin_Tree(60, 100, 700, 100)
-    tree5 = Thin_Tree(60, 100, 680, 170)
-    tree6 = Thin_Tree(60, 100, 700, 300)
+    tree = Tree(150, 150, 590, 190)
+    tree2 = Tree(150, 150, 70, 230)
+    bush1 = Bush(35, 35, 50, 200)
+    bush2 = Bush(60, 60, 230, 310)
+    bush3 = Bush(50, 50, 200, 200)
+    bush4 = Bush(50, 50, 520, 320)
+    bush5 = Bush(50, 50, 560, 280)
+    bush6 = Bush(50, 50, 700, 320)
+    bush7 = Bush(35, 35, 745, 190)
+    portal = Portal(100, 100, 360, -10)
+    portal2 = Portal(100, 100, 700, 60)
+    portal3 = Portal(100, 100, 0, 60)
+    portal_1.add(portal)
+    portal_2.add(portal2)
+    portal_3.add(portal3)
     all_sprites.add(tree)
     trees.add(tree)
     all_sprites.add(tree2)
     trees.add(tree2)
-    all_sprites.add(tree3)
-    trees.add(tree3)
-    all_sprites.add(tree4)
-    trees.add(tree4)
     return player
+
 
 
 def main():
