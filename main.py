@@ -47,6 +47,7 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, vertical_borders):
             self.vx = 0
 
+
 class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
         super().__init__(all_sprites)
@@ -60,12 +61,31 @@ class Border(pygame.sprite.Sprite):
             self.rect = pygame.Rect(x1, y1, x2 - x1, 1)
 
 
+class Tree(pygame.sprite.Sprite):
+    def __init__(self, radius, x, y):
+        super().__init__(all_sprites)
+        self.radius = radius
+        self.image = load_image("Big Green Tree.png")
+        self.image = pygame.transform.scale(self.image, (50, 50))
+        self.rect = self.image.get_rect()
+        self.rect.x = 500
+        self.rect.y = 100
+
+    # def update(self):
+    #     self.rect = self.rect.move(self.vx, self.vy)
+    #     if pygame.sprite.spritecollideany(self, horizontal_borders):
+    #         self.vy = 0
+    #     if pygame.sprite.spritecollideany(self, vertical_borders):
+    #         self.vx = 0
+
+
 def main():
     Border(5, 5, width - 5, 5)
     Border(5, height - 5, width - 5, height - 5)
     Border(5, 5, 5, height - 5)
     Border(width - 5, 5, width - 5, height - 5)
     player = Player(20, 100, 100)
+    tree = Tree(10, 100, 100)
     bg = pygame.image.load('data/Grass.png')
     bg = pygame.transform.scale(bg, (800, 400))
 
