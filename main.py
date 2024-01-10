@@ -14,6 +14,8 @@ trees = pygame.sprite.Group()
 portal_1 = pygame.sprite.Group()
 portal_2 = pygame.sprite.Group()
 portal_3 = pygame.sprite.Group()
+player_sprite = pygame.sprite.Group()
+game_state = "start_menu"
 
 
 def load_image(name, colorkey=None):
@@ -34,7 +36,7 @@ def load_image(name, colorkey=None):
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, s1, s2, x, y):
-        super().__init__(all_sprites)
+        super().__init__(player_sprite)
         self.image = load_image("DeftSorceress.png")
         self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
@@ -42,8 +44,12 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = y
         self.vx = 0
         self.vy = 0
+        self.select_level_1_3 = False
+        self.select_level_1_2 = False
+        self.select_level_1_1 = False
 
     def update(self):
+        global game_state
         self.rect = self.rect.move(self.vx, self.vy)
         if pygame.sprite.spritecollideany(self, horizontal_borders):
             self.vy = 0
@@ -53,11 +59,15 @@ class Player(pygame.sprite.Sprite):
             self.vx = 0
             self.vy = 0
         if pygame.sprite.spritecollideany(self, portal_1):
-            print('portal_1')
+            self.select_level_1_1 = True
+            game_state = 'level_1_3'
         if pygame.sprite.spritecollideany(self, portal_2):
-            print('portal_2')
+            self.select_level_1_2 = True
+            game_state = 'level_1_3'
         if pygame.sprite.spritecollideany(self, portal_3):
-            print('portal_3')
+            self.select_level_1_3 = True
+            game_state = 'level_1_3'
+
 
 
 class Border(pygame.sprite.Sprite):
@@ -107,13 +117,13 @@ def level_1():
     player = Player(50, 50, 375, 300)
     tree = Tree(150, 150, 590, 190)
     tree2 = Tree(150, 150, 70, 230)
-    bush1 = Bush(35, 35, 50, 200)
-    bush2 = Bush(60, 60, 230, 310)
-    bush3 = Bush(50, 50, 200, 200)
-    bush4 = Bush(50, 50, 520, 320)
-    bush5 = Bush(50, 50, 560, 280)
-    bush6 = Bush(50, 50, 700, 320)
-    bush7 = Bush(35, 35, 745, 190)
+    Bush(35, 35, 50, 200)
+    Bush(60, 60, 230, 310)
+    Bush(50, 50, 200, 200)
+    Bush(50, 50, 520, 320)
+    Bush(50, 50, 560, 280)
+    Bush(50, 50, 700, 320)
+    Bush(35, 35, 745, 190)
     portal = Portal(100, 100, 360, -10)
     portal2 = Portal(100, 100, 700, 60)
     portal3 = Portal(100, 100, 0, 60)
@@ -127,13 +137,22 @@ def level_1():
     return player
 
 
+def level_1_3():
+    bg = pygame.image.load('data/Grass.png')
+    bg = pygame.transform.scale(bg, (800, 400))
+    screen.blit(bg, (0, 0))
+    player = Player(50, 50, 375, 300)
+    return player
+
+
 def main():
-    game_state = "start_menu"
+    global  game_state
     Border(5, 5, width - 5, 5)
     Border(5, height - 5, width - 5, height - 5)
     Border(5, 5, 5, height - 5)
     Border(width - 5, 5, width - 5, height - 5)
     player = level_1()
+    player_sprite.add(player)
 
     def draw_start_menu():
         screen.fill((0, 0, 0))
@@ -172,21 +191,27 @@ def main():
                     player.vy = 0
                 if event.key == pygame.K_d:
                     player.vx = 0
+        print(player.select_level_1_3)
         if game_state == "start_menu":
             draw_start_menu()
             keys = pygame.key.get_pressed()
             if keys[pygame.K_SPACE]:
-                player_x = 200
-                player_y = 400
-                game_state = "game"
-                game_over = False
+                game_state = "level_1"
 
-        if game_state == "game":
+        if game_state == "level_1":
             bg = pygame.image.load('data/Grass.png')
             bg = pygame.transform.scale(bg, (800, 400))
             screen.blit(bg, (0, 0))
             all_sprites.draw(screen)
             all_sprites.update()
+            player_sprite.draw(screen)
+            player_sprite.update()
+        if game_state == 'level_1_3':
+            pygame.draw.circle(screen, (255, 255, 255), (10, 300), 30)
+            player = level_1_3()
+            player_sprite.draw(screen)
+            player_sprite.update()
+            print(0)
         clock.tick(fps)
         pygame.display.flip()
     pygame.quit()
