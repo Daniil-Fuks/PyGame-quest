@@ -52,6 +52,12 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, trees):
             self.vx = 0
             self.vy = 0
+        if pygame.sprite.spritecollideany(self, portal_1):
+            print('portal_1')
+        if pygame.sprite.spritecollideany(self, portal_2):
+            print('portal_2')
+        if pygame.sprite.spritecollideany(self, portal_3):
+            print('portal_3')
 
 
 class Border(pygame.sprite.Sprite):
@@ -97,7 +103,6 @@ class Portal(pygame.sprite.Sprite):
         self.rect.y = y
 
 
-
 def level_1():
     player = Player(50, 50, 375, 300)
     tree = Tree(150, 150, 590, 190)
@@ -120,7 +125,6 @@ def level_1():
     all_sprites.add(tree2)
     trees.add(tree2)
     return player
-
 
 
 def main():
@@ -178,11 +182,11 @@ def main():
                 game_over = False
 
         if game_state == "game":
-                bg = pygame.image.load('data/Grass.png')
-                bg = pygame.transform.scale(bg, (800, 400))
-                screen.blit(bg, (0, 0))
-                all_sprites.draw(screen)
-                all_sprites.update()
+            bg = pygame.image.load('data/Grass.png')
+            bg = pygame.transform.scale(bg, (800, 400))
+            screen.blit(bg, (0, 0))
+            all_sprites.draw(screen)
+            all_sprites.update()
         clock.tick(fps)
         pygame.display.flip()
     pygame.quit()
