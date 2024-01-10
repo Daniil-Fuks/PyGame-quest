@@ -69,7 +69,6 @@ class Player(pygame.sprite.Sprite):
             game_state = 'level_1_3'
 
 
-
 class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
         super().__init__(all_sprites)
@@ -113,8 +112,24 @@ class Portal(pygame.sprite.Sprite):
         self.rect.y = y
 
 
+current_level = None
+
+
+def switch_level(level):
+    global current_level
+    current_level = level
+
+
 def level_1():
+    running = True
+    fps = 60
+    clock = pygame.time.Clock()
     player = Player(50, 50, 375, 300)
+    player_sprite.add(player)
+    Border(5, 5, width - 5, 5)
+    Border(5, height - 5, width - 5, height - 5)
+    Border(5, 5, 5, height - 5)
+    Border(width - 5, 5, width - 5, height - 5)
     tree = Tree(150, 150, 590, 190)
     tree2 = Tree(150, 150, 70, 230)
     Bush(35, 35, 50, 200)
@@ -134,41 +149,7 @@ def level_1():
     trees.add(tree)
     all_sprites.add(tree2)
     trees.add(tree2)
-    return player
 
-
-def level_1_3():
-    bg = pygame.image.load('data/Grass.png')
-    bg = pygame.transform.scale(bg, (800, 400))
-    screen.blit(bg, (0, 0))
-    player = Player(50, 50, 375, 300)
-    return player
-
-
-def main():
-    global  game_state
-    Border(5, 5, width - 5, 5)
-    Border(5, height - 5, width - 5, height - 5)
-    Border(5, 5, 5, height - 5)
-    Border(width - 5, 5, width - 5, height - 5)
-    player = level_1()
-    player_sprite.add(player)
-
-    def draw_start_menu():
-        screen.fill((0, 0, 0))
-        font = pygame.font.SysFont('arial', 40)
-        title = font.render('My Game', True, (255, 255, 255))
-        start_button = font.render('Start', True, (255, 255, 255))
-        screen.blit(title,
-                    (screen.get_width() / 2 - title.get_width() / 2, screen.get_height() / 2 - title.get_height() / 2))
-        screen.blit(start_button, (
-            screen.get_width() / 2 - start_button.get_width() / 2,
-            screen.get_height() / 2 + start_button.get_height() / 2))
-        pygame.display.update()
-
-    running = True
-    fps = 60
-    clock = pygame.time.Clock()
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -191,31 +172,39 @@ def main():
                     player.vy = 0
                 if event.key == pygame.K_d:
                     player.vx = 0
-        print(player.select_level_1_3)
-        if game_state == "start_menu":
-            draw_start_menu()
-            keys = pygame.key.get_pressed()
-            if keys[pygame.K_SPACE]:
-                game_state = "level_1"
-
-        if game_state == "level_1":
-            bg = pygame.image.load('data/Grass.png')
-            bg = pygame.transform.scale(bg, (800, 400))
-            screen.blit(bg, (0, 0))
-            all_sprites.draw(screen)
-            all_sprites.update()
-            player_sprite.draw(screen)
-            player_sprite.update()
-        if game_state == 'level_1_3':
-            pygame.draw.circle(screen, (255, 255, 255), (10, 300), 30)
-            player = level_1_3()
-            player_sprite.draw(screen)
-            player_sprite.update()
-            print(0)
+        bg = pygame.image.load('data/Grass.png')
+        bg = pygame.transform.scale(bg, (800, 400))
+        screen.blit(bg, (0, 0))
+        all_sprites.draw(screen)
+        all_sprites.update()
+        player_sprite.draw(screen)
+        player_sprite.update()
         clock.tick(fps)
         pygame.display.flip()
-    pygame.quit()
+
+
+def start_game():
+    def draw_start_menu():
+        screen.fill((255, 0, 0))
+        font = pygame.font.SysFont('arial', 40)
+        title = font.render('My Game', True, (255, 255, 255))
+        start_button = font.render('Start', True, (255, 255, 255))
+        screen.blit(title,
+                    (screen.get_width() / 2 - title.get_width() / 2, screen.get_height() / 2 - title.get_height() / 2))
+        screen.blit(start_button, (
+            screen.get_width() / 2 - start_button.get_width() / 2,
+            screen.get_height() / 2 + start_button.get_height() / 2))
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        draw_start_menu()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_SPACE]:
+            switch_level(level_1())
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(start_game())
