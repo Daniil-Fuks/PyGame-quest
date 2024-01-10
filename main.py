@@ -15,7 +15,7 @@ portal_1 = pygame.sprite.Group()
 portal_2 = pygame.sprite.Group()
 portal_3 = pygame.sprite.Group()
 player_sprite = pygame.sprite.Group()
-game_state = "start_menu"
+current_level = "start_menu"
 
 
 def load_image(name, colorkey=None):
@@ -112,9 +112,6 @@ class Portal(pygame.sprite.Sprite):
         self.rect.y = y
 
 
-current_level = None
-
-
 def switch_level(level):
     global current_level
     current_level = level
@@ -175,35 +172,40 @@ def level_1():
         bg = pygame.image.load('data/Grass.png')
         bg = pygame.transform.scale(bg, (800, 400))
         screen.blit(bg, (0, 0))
-        all_sprites.draw(screen)
-        all_sprites.update()
         player_sprite.draw(screen)
         player_sprite.update()
+        all_sprites.draw(screen)
+        all_sprites.update()
         clock.tick(fps)
         pygame.display.flip()
 
 
 def start_game():
+    global current_level
+
     def draw_start_menu():
-        screen.fill((255, 0, 0))
-        font = pygame.font.SysFont('arial', 40)
-        title = font.render('My Game', True, (255, 255, 255))
-        start_button = font.render('Start', True, (255, 255, 255))
+        screen.fill((0, 0, 0))
+        font = pygame.font.SysFont('Calibri', 40)
+        title = font.render('Игра-квест', True, (255, 255, 255))
+        start_button = font.render('Нажите пробел, чтобы начать игру', True, (255, 255, 255))
         screen.blit(title,
                     (screen.get_width() / 2 - title.get_width() / 2, screen.get_height() / 2 - title.get_height() / 2))
         screen.blit(start_button, (
             screen.get_width() / 2 - start_button.get_width() / 2,
             screen.get_height() / 2 + start_button.get_height() / 2))
+        pygame.display.update()
 
     running = True
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
-        draw_start_menu()
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE]:
-            switch_level(level_1())
+        if current_level == "start_menu":
+            draw_start_menu()
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_SPACE]:
+                switch_level(level_1())
+                running = False
 
 
 if __name__ == "__main__":
