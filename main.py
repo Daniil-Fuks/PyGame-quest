@@ -16,6 +16,7 @@ portal_2 = pygame.sprite.Group()
 portal_3 = pygame.sprite.Group()
 player_sprite = pygame.sprite.Group()
 current_level = "start_menu"
+npc_group = pygame.sprite.Group()
 
 
 def load_image(name, colorkey=None):
@@ -55,7 +56,7 @@ class Player(pygame.sprite.Sprite):
             self.vy = 0
         if pygame.sprite.spritecollideany(self, vertical_borders):
             self.vx = 0
-        if pygame.sprite.spritecollideany(self, trees):
+        if pygame.sprite.spritecollideany(self, trees) or pygame.sprite.spritecollideany(self, npc_group):
             self.vx = 0
             self.vy = 0
         if pygame.sprite.spritecollideany(self, portal_1):
@@ -67,6 +68,16 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, portal_3):
             self.select_level_1_3 = True
             game_state = 'level_1_3'
+
+
+class First_npc(pygame.sprite.Sprite):
+    def __init__(self, s1, s2, x, y):
+        super().__init__(player_sprite)
+        self.image = load_image("First npc.png")
+        self.image = pygame.transform.scale(self.image, (s1, s2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
 
 class Border(pygame.sprite.Sprite):
@@ -123,6 +134,7 @@ def level_1():
     clock = pygame.time.Clock()
     player = Player(50, 50, 375, 300)
     player_sprite.add(player)
+    npc_1 = First_npc(50, 50, 500, 200)
     Border(5, 5, width - 5, 5)
     Border(5, height - 5, width - 5, height - 5)
     Border(5, 5, 5, height - 5)
@@ -146,6 +158,8 @@ def level_1():
     trees.add(tree)
     all_sprites.add(tree2)
     trees.add(tree2)
+    all_sprites.add(npc_1)
+    npc_group.add(npc_1)
 
     while running:
         for event in pygame.event.get():
