@@ -61,13 +61,10 @@ class Player(pygame.sprite.Sprite):
             self.vy = 0
         if pygame.sprite.spritecollideany(self, portal_1):
             self.select_level_1_1 = True
-            game_state = 'level_1_3'
         if pygame.sprite.spritecollideany(self, portal_2):
             self.select_level_1_2 = True
-            game_state = 'level_1_3'
         if pygame.sprite.spritecollideany(self, portal_3):
             self.select_level_1_3 = True
-            game_state = 'level_1_3'
 
 
 class First_npc(pygame.sprite.Sprite):
@@ -183,6 +180,10 @@ def level_1():
                     player.vy = 0
                 if event.key == pygame.K_d:
                     player.vx = 0
+            if player.select_level_1_1:
+                running = False
+                switch_level(level_1_1())
+
         bg = pygame.image.load('data/Grass.png')
         bg = pygame.transform.scale(bg, (800, 400))
         screen.blit(bg, (0, 0))
@@ -190,6 +191,54 @@ def level_1():
         player_sprite.update()
         all_sprites.draw(screen)
         all_sprites.update()
+        clock.tick(fps)
+        pygame.display.flip()
+
+
+def level_1_1():
+    bg = pygame.image.load('data/Grass.png')
+    all_sprites.clear(screen, bgd=bg)
+    player_sprite.clear(screen, bgd=bg)
+    npc_group.clear(screen, bg)
+    trees.clear(screen, bg)
+    portal_1.clear(screen, bg)
+    running = True
+    fps = 60
+    clock = pygame.time.Clock()
+    player = Player(50, 50, 375, 300)
+    player_sprite.add(player)
+
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w:
+                    player.vy = -5
+                if event.key == pygame.K_a:
+                    player.vx = -5
+                if event.key == pygame.K_s:
+                    player.vy = 5
+                if event.key == pygame.K_d:
+                    player.vx = 5
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_w:
+                    player.vy = 0
+                if event.key == pygame.K_a:
+                    player.vx = 0
+                if event.key == pygame.K_s:
+                    player.vy = 0
+                if event.key == pygame.K_d:
+                    player.vx = 0
+            if player.select_level_1_1:
+                switch_level(None)
+                running = False
+        bg = pygame.transform.scale(bg, (800, 400))
+        screen.blit(bg, (0, 0))
+        player_sprite.draw(screen)
+        player_sprite.update()
+        player_sprite.draw(screen)
+        player_sprite.update()
         clock.tick(fps)
         pygame.display.flip()
 
