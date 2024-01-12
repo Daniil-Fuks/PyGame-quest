@@ -138,13 +138,13 @@ def level_1():
     Border(width - 5, 5, width - 5, height - 5)
     tree = Tree(150, 150, 590, 190)
     tree2 = Tree(150, 150, 70, 230)
-    Bush(35, 35, 50, 200)
-    Bush(60, 60, 230, 310)
-    Bush(50, 50, 200, 200)
-    Bush(50, 50, 520, 320)
-    Bush(50, 50, 560, 280)
-    Bush(50, 50, 700, 320)
-    Bush(35, 35, 745, 190)
+    b1 = Bush(35, 35, 50, 200)
+    b2 = Bush(60, 60, 230, 310)
+    b3 = Bush(50, 50, 200, 200)
+    b4 = Bush(50, 50, 520, 320)
+    b5 = Bush(50, 50, 560, 280)
+    b6 = Bush(50, 50, 700, 320)
+    b7 = Bush(35, 35, 745, 190)
     portal = Portal(100, 100, 360, -10)
     portal2 = Portal(100, 100, 700, 60)
     portal3 = Portal(100, 100, 0, 60)
@@ -157,6 +157,22 @@ def level_1():
     trees.add(tree2)
     all_sprites.add(npc_1)
     npc_group.add(npc_1)
+
+    def kill_all():
+        player.kill()
+        tree.kill()
+        tree2.kill()
+        portal.kill()
+        portal2.kill()
+        portal3.kill()
+        b1.kill()
+        b2.kill()
+        b3.kill()
+        b4.kill()
+        b5.kill()
+        b6.kill()
+        b7.kill()
+        npc_1.kill()
 
     while running:
         for event in pygame.event.get():
@@ -182,20 +198,20 @@ def level_1():
                     player.vx = 0
             if player.select_level_1_1:
                 running = False
-                player.kill()
-                tree.kill()
+                screen.fill((255, 0, 0))
+                kill_all()
                 level_1_1()
                 switch_level("lvl2")
-
-        bg = pygame.image.load('data/Grass.png')
-        bg = pygame.transform.scale(bg, (800, 400))
-        screen.blit(bg, (0, 0))
-        player_sprite.draw(screen)
-        player_sprite.update()
-        all_sprites.draw(screen)
-        all_sprites.update()
-        clock.tick(fps)
-        pygame.display.flip()
+        if not player.select_level_1_1:
+            bg = pygame.image.load('data/Grass.png')
+            bg = pygame.transform.scale(bg, (800, 400))
+            screen.blit(bg, (0, 0))
+            player_sprite.draw(screen)
+            player_sprite.update()
+            all_sprites.draw(screen)
+            all_sprites.update()
+            clock.tick(fps)
+            pygame.display.flip()
 
 
 def level_1_1():
@@ -205,6 +221,7 @@ def level_1_1():
     clock = pygame.time.Clock()
     player = Player(50, 50, 375, 300)
     player_sprite.add(player)
+    all_sprites.add(player)
 
     while running:
         for event in pygame.event.get():
@@ -233,10 +250,8 @@ def level_1_1():
                 running = False
         bg = pygame.transform.scale(bg, (800, 400))
         screen.blit(bg, (0, 0))
-        player_sprite.draw(screen)
-        player_sprite.update()
-        player_sprite.draw(screen)
-        player_sprite.update()
+        all_sprites.draw(screen)
+        all_sprites.update()
         clock.tick(fps)
         pygame.display.flip()
 
