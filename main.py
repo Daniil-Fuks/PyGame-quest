@@ -76,6 +76,14 @@ class First_npc(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+class Boss(pygame.sprite.Sprite):
+    def __init__(self, s1, s2, x, y):
+        super().__init__(player_sprite)
+        self.image = load_image("Boss.png")
+        self.image = pygame.transform.scale(self.image, (s1, s2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
 class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
@@ -222,7 +230,8 @@ def level_1_1():
     player = Player(50, 50, 375, 300)
     player_sprite.add(player)
     all_sprites.add(player)
-
+    main_boss = Boss(300, 300, 300, 500)
+    all_sprites.add(main_boss)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
