@@ -15,6 +15,8 @@ portal_1 = pygame.sprite.Group()
 portal_2 = pygame.sprite.Group()
 portal_3 = pygame.sprite.Group()
 player_sprite = pygame.sprite.Group()
+stick_group = pygame.sprite.Group()
+sword_group = pygame.sprite.Group()
 current_level = "start_menu"
 npc_group = pygame.sprite.Group()
 
@@ -76,6 +78,7 @@ class First_npc(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+
 class Boss(pygame.sprite.Sprite):
     def __init__(self, s1, s2, x, y):
         super().__init__(player_sprite)
@@ -84,6 +87,27 @@ class Boss(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
+
+
+class Sword(pygame.sprite.Sprite):
+    def __init__(self, s1, s2, x, y):
+        super().__init__(player_sprite)
+        self.image = load_image("Sword.png")
+        self.image = pygame.transform.scale(self.image, (s1, s2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+class Stick(pygame.sprite.Sprite):
+    def __init__(self, s1, s2, x, y):
+        super().__init__(player_sprite)
+        self.image = load_image("Stick.png")
+        self.image = pygame.transform.scale(self.image, (s1, s2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
 
 class Border(pygame.sprite.Sprite):
     def __init__(self, x1, y1, x2, y2):
@@ -137,13 +161,13 @@ def level_1():
     running = True
     fps = 60
     clock = pygame.time.Clock()
-    player = Player(50, 50, 375, 300)
+    player = Player(35, 50, 375, 300)
     player_sprite.add(player)
     npc_1 = First_npc(50, 50, 500, 200)
-    Border(5, 5, width - 5, 5)
-    Border(5, height - 5, width - 5, height - 5)
-    Border(5, 5, 5, height - 5)
-    Border(width - 5, 5, width - 5, height - 5)
+    Border(0, 0, width, 0)
+    Border(0, height, width, height)
+    Border(0, 0, 0, height)
+    Border(width, 0, width, height)
     tree = Tree(150, 150, 590, 190)
     tree2 = Tree(150, 150, 70, 230)
     b1 = Bush(35, 35, 50, 200)
@@ -224,14 +248,23 @@ def level_1():
 
 def level_1_1():
     bg = pygame.image.load('data/Grass.png')
+    all_sprites.draw(screen)
     running = True
     fps = 60
     clock = pygame.time.Clock()
-    player = Player(50, 50, 375, 300)
+    player = Player(35, 50, 375, 300)
     player_sprite.add(player)
     all_sprites.add(player)
-    main_boss = Boss(300, 300, 300, 500)
+    main_boss = Boss(250, 250, 550, 50)
     all_sprites.add(main_boss)
+    npc_group.add(main_boss)
+    sword = Sword(70, 70, 50, 100)
+    all_sprites.add(sword)
+    sword_group.add(sword)
+    stick = Stick(50,50, 50, 300)
+    stick_group.add(stick)
+    all_sprites.add(stick)
+    sword_group.add(stick)
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
