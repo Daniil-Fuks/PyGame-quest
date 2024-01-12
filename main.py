@@ -182,7 +182,10 @@ def level_1():
                     player.vx = 0
             if player.select_level_1_1:
                 running = False
-                switch_level(level_1_1())
+                player.kill()
+                tree.kill()
+                level_1_1()
+                switch_level("lvl2")
 
         bg = pygame.image.load('data/Grass.png')
         bg = pygame.transform.scale(bg, (800, 400))
@@ -197,11 +200,6 @@ def level_1():
 
 def level_1_1():
     bg = pygame.image.load('data/Grass.png')
-    all_sprites.clear(screen, bgd=bg)
-    player_sprite.clear(screen, bgd=bg)
-    npc_group.clear(screen, bg)
-    trees.clear(screen, bg)
-    portal_1.clear(screen, bg)
     running = True
     fps = 60
     clock = pygame.time.Clock()
