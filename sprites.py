@@ -45,6 +45,8 @@ class Player(pygame.sprite.Sprite):
         self.select_level_1_3 = False
         self.select_level_1_2 = False
         self.select_level_1_1 = False
+        self.select_sword = False
+        self.select_stick = False
 
     def update(self):
         self.rect = self.rect.move(self.vx, self.vy)
@@ -61,6 +63,10 @@ class Player(pygame.sprite.Sprite):
             self.select_level_1_2 = True
         if pygame.sprite.spritecollideany(self, portal_3):
             self.select_level_1_3 = True
+        if pygame.sprite.spritecollideany(self, sword_group):
+            self.select_sword = True
+        if pygame.sprite.spritecollideany(self, stick_group):
+            self.select_stick = True
 
 
 class FirstNpc(pygame.sprite.Sprite):

@@ -147,9 +147,22 @@ def level_1_1():
                     player.vy = 0
                 if event.key == pygame.K_d:
                     player.vx = 0
-            if player.select_level_1_1:
-                switch_level(None)
-                running = False
+
+        def kill_sprites():
+            player.kill()
+            sword.kill()
+            stick.kill()
+            main_boss.kill()
+
+        if player.select_sword:
+            running = False
+            kill_sprites()
+            switch_level(mini_game_hard())
+
+        if player.select_stick:
+            running = False
+            kill_sprites()
+            switch_level(mini_game_eazy())
         bg = pygame.transform.scale(bg, (800, 400))
         screen.blit(bg, (0, 0))
         all_sprites.draw(screen)
@@ -184,6 +197,82 @@ def start_game():
             if keys[pygame.K_SPACE]:
                 switch_level(level_1())
                 running = False
+
+
+def mini_game_hard():
+    bg = pygame.image.load('data/Grass.png')
+    running = True
+    fps = 60
+    clock = pygame.time.Clock()
+    cnt_impact = 0
+    font = pygame.font.SysFont('Calibri', 40)
+    start_timer = pygame.time.get_ticks()
+    while running:
+        seconds = (pygame.time.get_ticks() - start_timer) / 1000
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                switch_level(None)
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w:
+                    cnt_impact += 10
+        if seconds < 30:
+            font_imp = pygame.font.SysFont('Calibri', 30)
+            imp = font_imp.render(f'Нанесено урона: {cnt_impact} / 10000', True, (255, 0, 0))
+            screen.blit(imp, (width / 2 - imp.get_width() / 2, height / 2 - imp.get_height() / 2))
+            title = font.render('Нажимайте W чтобы нанести урон', True, (0, 0, 0))
+            font_timer = pygame.font.SysFont('Calibri', 60)
+            timer_text = font_timer.render(f'{str(abs(int(seconds) - 30))}', True, (0, 0, 0))
+            screen.blit(timer_text, (width / 2 - timer_text.get_width() / 2, height / 1.5))
+            screen.blit(title, (width / 2 - title.get_width() / 2, height / 5 - title.get_height() / 2))
+        else:
+            last_text = font.render("Вы проиграли. Попробуйте еще раз!", True, (0, 0, 0))
+            screen.blit(last_text, (width / 2 - last_text.get_width() / 2, height / 2 - last_text.get_height() / 2))
+        pygame.display.update()
+        bg = pygame.transform.scale(bg, (800, 400))
+        screen.blit(bg, (0, 0))
+        all_sprites.draw(screen)
+        all_sprites.update()
+        clock.tick(fps)
+        pygame.display.flip()
+
+
+def mini_game_eazy():
+    bg = pygame.image.load('data/Grass.png')
+    running = True
+    fps = 60
+    clock = pygame.time.Clock()
+    cnt_impact = 0
+    font = pygame.font.SysFont('Calibri', 40)
+    start_timer = pygame.time.get_ticks()
+    while running:
+        seconds = (pygame.time.get_ticks() - start_timer) / 1000
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                switch_level(None)
+                running = False
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_w:
+                    cnt_impact += 200
+        if seconds < 30:
+            font_imp = pygame.font.SysFont('Calibri', 30)
+            imp = font_imp.render(f'Нанесено урона: {cnt_impact} / 10000', True, (255, 0, 0))
+            screen.blit(imp, (width / 2 - imp.get_width() / 2, height / 2 - imp.get_height() / 2))
+            title = font.render('Нажимайте W чтобы нанести урон', True, (0, 0, 0))
+            font_timer = pygame.font.SysFont('Calibri', 60)
+            timer_text = font_timer.render(f'{str(abs(int(seconds) - 30))}', True, (0, 0, 0))
+            screen.blit(timer_text, (width / 2 - timer_text.get_width() / 2, height / 1.5))
+            screen.blit(title, (width / 2 - title.get_width() / 2, height / 5 - title.get_height() / 2))
+        else:
+            last_text = font.render("Вы проиграли. Попробуйте еще раз!", True, (0, 0, 0))
+            screen.blit(last_text, (width / 2 - last_text.get_width() / 2, height / 2 - last_text.get_height() / 2))
+        pygame.display.update()
+        bg = pygame.transform.scale(bg, (800, 400))
+        screen.blit(bg, (0, 0))
+        all_sprites.draw(screen)
+        all_sprites.update()
+        clock.tick(fps)
+        pygame.display.flip()
 
 
 if __name__ == "__main__":
