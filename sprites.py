@@ -33,9 +33,22 @@ def load_image(name, colorkey=None):
 
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, s1, s2, x, y):
+    def __init__(self, screen, s1, s2, x, y):
         super().__init__(player_sprite)
-        self.image = load_image("DeftSorceress.png")
+        self.screen = screen
+        self.walk_left = [
+            load_image('player/left/1.png'),
+            load_image('player/left/2.png'),
+            load_image('player/left/3.png'),
+            load_image('player/left/4.png')]
+
+        self.walk_right = [
+            load_image('player/right/1.png'),
+            load_image('player/right/2.png'),
+            load_image('player/right/3.png'),
+            load_image('player/right/4.png')
+        ]
+        self.image = load_image("player/1.png")
         self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -47,6 +60,23 @@ class Player(pygame.sprite.Sprite):
         self.select_level_1_1 = False
         self.select_sword = False
         self.select_stick = False
+        self.anim_count = 0
+        self.left = False
+        self.right = False
+
+    def animation(self):
+        if self.anim_count + 1 >= 60:
+            self.anim_count = 0
+        if self.left:
+            self.screen.blit(self.walk_left[self.anim_count // 15], (35, 50))
+            self.anim_count += 1
+        if self.right:
+            self.screen.blit(self.walk_right[self.anim_count // 15], (35, 50))
+            self.anim_count += 1
+        if not self.left and not self.right:
+            self.screen.blit(self.image, (35, 50))
+        print(f'right: {self.right}, left: {self.left}')
+
 
     def update(self):
         self.rect = self.rect.move(self.vx, self.vy)

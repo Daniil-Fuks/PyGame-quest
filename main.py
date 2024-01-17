@@ -21,7 +21,7 @@ def level_1():
     running = True
     fps = 60
     clock = pygame.time.Clock()
-    player = Player(35, 50, 375, 300)
+    player = Player(screen, 35, 50, 375, 300)
     player_sprite.add(player)
     npc_1 = FirstNpc(50, 50, 500, 200)
     Border(0, 0, width, 0)
@@ -73,21 +73,37 @@ def level_1():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
                     player.vy = -5
+                    player.left = False
+                    player.right = True
                 if event.key == pygame.K_a:
                     player.vx = -5
+                    player.left = True
+                    player.right = False
                 if event.key == pygame.K_s:
                     player.vy = 5
+                    player.left = True
+                    player.right = False
                 if event.key == pygame.K_d:
                     player.vx = 5
+                    player.left = False
+                    player.right = True
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_w:
                     player.vy = 0
+                    player.left = False
+                    player.right = False
                 if event.key == pygame.K_a:
                     player.vx = 0
+                    player.left = False
+                    player.right = False
                 if event.key == pygame.K_s:
                     player.vy = 0
+                    player.left = False
+                    player.right = False
                 if event.key == pygame.K_d:
                     player.vx = 0
+                    player.left = False
+                    player.right = False
             if player.select_level_1_1:
                 running = False
                 screen.fill((255, 0, 0))
@@ -102,6 +118,7 @@ def level_1():
             player_sprite.update()
             all_sprites.draw(screen)
             all_sprites.update()
+            player.animation()
             clock.tick(fps)
             pygame.display.flip()
 
@@ -113,7 +130,7 @@ def level_1_1():
     running = True
     fps = 60
     clock = pygame.time.Clock()
-    player = Player(35, 50, 375, 300)
+    player = Player(screen, 35, 50, 375, 300)
     player_sprite.add(player)
     all_sprites.add(player)
     main_boss = Boss(250, 250, 550, 50)
@@ -137,12 +154,20 @@ def level_1_1():
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
                     player.vy = -5
+                    player.left = False
+                    player.right = True
                 if event.key == pygame.K_a:
                     player.vx = -5
+                    player.left = True
+                    player.right = False
                 if event.key == pygame.K_s:
                     player.vy = 5
+                    player.left = True
+                    player.right = False
                 if event.key == pygame.K_d:
                     player.vx = 5
+                    player.left = False
+                    player.right = True
                 if event.key == pygame.K_SPACE and pygame.sprite.spritecollideany(player, npc_group):
                     if weapon == "stick" and main_boss.hp > 0:
                         main_boss.hp -= 50
@@ -151,12 +176,20 @@ def level_1_1():
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_w:
                     player.vy = 0
+                    player.left = False
+                    player.right = False
                 if event.key == pygame.K_a:
                     player.vx = 0
+                    player.left = False
+                    player.right = False
                 if event.key == pygame.K_s:
                     player.vy = 0
+                    player.left = False
+                    player.right = False
                 if event.key == pygame.K_d:
                     player.vx = 0
+                    player.left = False
+                    player.right = False
 
         def kill_sprites():
             player.kill()
@@ -184,6 +217,7 @@ def level_1_1():
             end_screen("win")
         all_sprites.draw(screen)
         all_sprites.update()
+        player.animation()
         clock.tick(fps)
         pygame.display.flip()
 
