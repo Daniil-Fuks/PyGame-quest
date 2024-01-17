@@ -118,7 +118,6 @@ def level_1():
             player_sprite.update()
             all_sprites.draw(screen)
             all_sprites.update()
-            player.animation()
             clock.tick(fps)
             pygame.display.flip()
 
@@ -133,7 +132,7 @@ def level_1_1():
     player = Player(screen, 35, 50, 375, 300)
     player_sprite.add(player)
     all_sprites.add(player)
-    main_boss = Boss(250, 250, 550, 50)
+    main_boss = Boss(screen, 250, 250, 550, 50)
     all_sprites.add(main_boss)
     npc_group.add(main_boss)
     sword = Sword(70, 70, 50, 100)
@@ -217,7 +216,7 @@ def level_1_1():
             end_screen("win")
         all_sprites.draw(screen)
         all_sprites.update()
-        player.animation()
+        main_boss.animation()
         clock.tick(fps)
         pygame.display.flip()
 

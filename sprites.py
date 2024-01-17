@@ -36,18 +36,6 @@ class Player(pygame.sprite.Sprite):
     def __init__(self, screen, s1, s2, x, y):
         super().__init__(player_sprite)
         self.screen = screen
-        self.walk_left = [
-            load_image('player/left/1.png'),
-            load_image('player/left/2.png'),
-            load_image('player/left/3.png'),
-            load_image('player/left/4.png')]
-
-        self.walk_right = [
-            load_image('player/right/1.png'),
-            load_image('player/right/2.png'),
-            load_image('player/right/3.png'),
-            load_image('player/right/4.png')
-        ]
         self.image = load_image("player/1.png")
         self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
@@ -60,23 +48,6 @@ class Player(pygame.sprite.Sprite):
         self.select_level_1_1 = False
         self.select_sword = False
         self.select_stick = False
-        self.anim_count = 0
-        self.left = False
-        self.right = False
-
-    def animation(self):
-        if self.anim_count + 1 >= 60:
-            self.anim_count = 0
-        if self.left:
-            self.screen.blit(self.walk_left[self.anim_count // 15], (35, 50))
-            self.anim_count += 1
-        if self.right:
-            self.screen.blit(self.walk_right[self.anim_count // 15], (35, 50))
-            self.anim_count += 1
-        if not self.left and not self.right:
-            self.screen.blit(self.image, (35, 50))
-        print(f'right: {self.right}, left: {self.left}')
-
 
     def update(self):
         self.rect = self.rect.move(self.vx, self.vy)
@@ -112,14 +83,39 @@ class FirstNpc(pygame.sprite.Sprite):
 
 
 class Boss(pygame.sprite.Sprite):
-    def __init__(self, s1, s2, x, y):
+    def __init__(self, screen, s1, s2, x, y):
         super().__init__(player_sprite)
-        self.image = load_image("Boss.png")
+        self.image = load_image('Boss/03_demon_cleave/demon_cleave_1.png')
+        self.screen = screen
+        self.animation_count = 0
+        self.boss_sprite = [
+            load_image('Boss/03_demon_cleave/demon_cleave_1.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_2.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_3.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_4.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_5.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_6.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_7.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_8.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_9.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_10.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_11.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_12.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_13.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_14.png'),
+            load_image('Boss/03_demon_cleave/demon_cleave_15.png')
+        ]
         self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
         self.hp = 600
         self.rect.x = x
         self.rect.y = y
+
+    def animation(self):
+        if self.animation_count + 1 >= 60:
+            self.animation_count = 0
+        self.screen.blit(self.boss_sprite[self.animation_count // 8], (300, 250))
+        self.animation_count += 1
 
 
 class Sword(pygame.sprite.Sprite):
