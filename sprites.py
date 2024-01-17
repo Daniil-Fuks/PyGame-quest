@@ -84,7 +84,7 @@ class FirstNpc(pygame.sprite.Sprite):
 
 class Boss(pygame.sprite.Sprite):
     def __init__(self, screen, s1, s2, x, y):
-        super().__init__(player_sprite)
+        super().__init__(npc_group)
         self.image = load_image('Boss/03_demon_cleave/demon_cleave_1.png')
         self.screen = screen
         self.animation_count = 0
@@ -105,16 +105,16 @@ class Boss(pygame.sprite.Sprite):
             load_image('Boss/03_demon_cleave/demon_cleave_14.png'),
             load_image('Boss/03_demon_cleave/demon_cleave_15.png')
         ]
-        self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
         self.hp = 600
         self.rect.x = x
         self.rect.y = y
 
     def animation(self):
+        self.image.set_alpha(0)
         if self.animation_count + 1 >= 60:
             self.animation_count = 0
-        self.screen.blit(self.boss_sprite[self.animation_count // 8], (300, 250))
+        self.screen.blit(self.boss_sprite[self.animation_count // 8], (self.rect.x, self.rect.y))
         self.animation_count += 1
 
 
