@@ -65,8 +65,10 @@ class Player(pygame.sprite.Sprite):
             self.select_level_1_3 = True
         if pygame.sprite.spritecollideany(self, sword_group):
             self.select_sword = True
+            self.select_stick = False
         if pygame.sprite.spritecollideany(self, stick_group):
             self.select_stick = True
+            self.select_sword = False
 
 
 class FirstNpc(pygame.sprite.Sprite):
@@ -85,6 +87,7 @@ class Boss(pygame.sprite.Sprite):
         self.image = load_image("Boss.png")
         self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
+        self.hp = 600
         self.rect.x = x
         self.rect.y = y
 
