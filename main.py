@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from sprites import Player, FirstNpc, Border, Tree, Bush, Portal, Boss, Stick, Sword, FireBall
+from sprites import Player, FirstNpc, Border, Tree, Bush, Portal, Boss, Stick, Sword, FireBall, FireBallLeft
 from sprites import player_sprite, trees, npc_group, portal_1, portal_2, portal_3, all_sprites, sword_group, \
     stick_group, damage_group
 
@@ -43,11 +43,7 @@ def level_1():
     b6 = Bush(50, 50, 700, 320)
     b7 = Bush(35, 35, 745, 190)
     portal = Portal(100, 100, 360, -10)
-    portal2 = Portal(100, 100, 700, 60)
-    portal3 = Portal(100, 100, 0, 60)
     portal_1.add(portal)
-    portal_2.add(portal2)
-    portal_3.add(portal3)
     all_sprites.add(tree)
     trees.add(tree)
     all_sprites.add(tree2)
@@ -60,8 +56,6 @@ def level_1():
         tree.kill()
         tree2.kill()
         portal.kill()
-        portal2.kill()
-        portal3.kill()
         b1.kill()
         b2.kill()
         b3.kill()
@@ -153,9 +147,13 @@ def level_1_1():
     f_1 = FireBall(30, 40, 700, -50)
     f_2 = FireBall(30, 40, 550, -150)
     f_3 = FireBall(30, 40, 400, -250)
-    f_4 = FireBall(30, 40, 350, -350)
-    f_5 = FireBall(30, 40, 200, -450)
-    f_6 = FireBall(30, 40, 50, -550)
+    f_4 = FireBall(30, 40, 250, -350)
+    f_5 = FireBall(30, 40, 100, -450)
+    f_6 = FireBall(30, 40, 0, -550)
+    fl_1 = FireBallLeft(30, 40, -100, 0)
+    fl_2 = FireBallLeft(30, 40, -200, 100)
+    fl_3 = FireBallLeft(30, 40, -300, 200)
+    fl_4 = FireBallLeft(30, 40, -400, 300)
     all_sprites.add(f_1)
     damage_group.add(f_1)
     all_sprites.add(f_2)
@@ -168,11 +166,35 @@ def level_1_1():
     damage_group.add(f_5)
     all_sprites.add(f_6)
     damage_group.add(f_6)
+    all_sprites.add(fl_1)
+    damage_group.add(fl_1)
+    all_sprites.add(fl_2)
+    damage_group.add(fl_2)
+    all_sprites.add(fl_3)
+    damage_group.add(fl_3)
+    all_sprites.add(fl_4)
+    damage_group.add(fl_4)
 
     def boss_fight():
         pygame.draw.rect(screen, (255, 0, 0), (100, 10, main_boss.hp, 30))
-        if timer > 175:
+        if 550 > timer > 175:
             fire_attack_1()
+        if timer > 200:
+            fire_attack_2()
+
+    def fire_attack_1():
+        f_1.rect = f_1.rect.move(0, 3)
+        f_2.rect = f_2.rect.move(0, 3)
+        f_3.rect = f_3.rect.move(0, 3)
+        f_4.rect = f_4.rect.move(0, 3)
+        f_5.rect = f_5.rect.move(0, 3)
+        f_6.rect = f_6.rect.move(0, 3)
+
+    def fire_attack_2():
+        fl_1.rect = fl_1.rect.move(3, 0)
+        fl_2.rect = fl_2.rect.move(3, 0)
+        fl_3.rect = fl_3.rect.move(3, 0)
+        fl_4.rect = fl_4.rect.move(3, 0)
 
     def fire_attack_1():
         f_1.rect = f_1.rect.move(0, 3)
@@ -186,7 +208,7 @@ def level_1_1():
         timer += 1
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                print(player.hp)
+                print(timer)
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
@@ -239,6 +261,10 @@ def level_1_1():
             f_4.kill()
             f_5.kill()
             f_6.kill()
+            fl_1.kill()
+            fl_2.kill()
+            fl_3.kill()
+            fl_4.kill()
 
         def kill_weapon():
             sword.kill()

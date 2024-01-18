@@ -33,6 +33,12 @@ def load_image(name, colorkey=None):
     return image
 
 
+def rot_center(image, angle, x, y):
+    rotated_image = pygame.transform.rotate(image, angle)
+    new_rect = rotated_image.get_rect(center=image.get_rect(center=(x, y)).center)
+
+    return rotated_image, new_rect
+
 class Player(pygame.sprite.Sprite):
     def __init__(self, screen, s1, s2, x, y):
         super().__init__(player_sprite)
@@ -184,11 +190,22 @@ class Portal(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
+
 class FireBall(pygame.sprite.Sprite):
     def __init__(self, s1, s2, x, y):
         super().__init__(all_sprites)
         self.image = load_image("Fire ball.png")
         self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+
+class FireBallLeft(pygame.sprite.Sprite):
+    def __init__(self, s1, s2, x, y):
+        super().__init__(all_sprites)
+        self.image = load_image("Fire ball.png")
+        self.image = pygame.transform.scale(self.image, (s1, s2))
+        self.image, self.rect = rot_center(self.image, 90, x, y)
         self.rect.x = x
         self.rect.y = y
