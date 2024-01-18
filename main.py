@@ -2,11 +2,15 @@ import sys
 
 import pygame
 
-from sprites import Player, FirstNpc, Border, Tree, Bush, Portal, Boss, Stick, Sword
-from sprites import player_sprite, trees, npc_group, portal_1, portal_2, portal_3, all_sprites, sword_group, stick_group
+from sprites import Player, FirstNpc, Border, Tree, Bush, Portal, Boss, Stick, Sword, FireBall
+from sprites import player_sprite, trees, npc_group, portal_1, portal_2, portal_3, all_sprites, sword_group, \
+    stick_group, damage_group
 
 pygame.init()
-pygame.display.set_caption("PyGame Quest")
+pygame.mixer.init()
+pygame.display.set_caption("Игра-квест")
+s1 = pygame.mixer.Sound("data/Sakura-Girl-Peach-chosic.com_.mp3")
+s2 = pygame.mixer.Sound("data/Boss fight.mp3")
 size = width, height = 800, 400
 screen = pygame.display.set_mode(size)
 current_level = "start_menu"
@@ -18,6 +22,7 @@ def switch_level(level):
 
 
 def level_1():
+    s1.play()
     running = True
     fps = 60
     clock = pygame.time.Clock()
@@ -105,6 +110,8 @@ def level_1():
                     player.left = False
                     player.right = False
             if player.select_level_1_1:
+                s1.stop()
+                s2.play(-1)
                 running = False
                 screen.fill((255, 0, 0))
                 kill_all()
@@ -123,7 +130,8 @@ def level_1():
 
 
 def level_1_1():
-    bg = pygame.image.load('data/Grass.png')
+    timer = 0
+    bg = pygame.image.load('data/background 2.png')
     all_sprites.draw(screen)
     weapon = None
     running = True
@@ -142,13 +150,43 @@ def level_1_1():
     stick_group.add(stick)
     all_sprites.add(stick)
     sword_group.add(stick)
+    f_1 = FireBall(30, 40, 700, -50)
+    f_2 = FireBall(30, 40, 550, -150)
+    f_3 = FireBall(30, 40, 400, -250)
+    f_4 = FireBall(30, 40, 350, -350)
+    f_5 = FireBall(30, 40, 200, -450)
+    f_6 = FireBall(30, 40, 50, -550)
+    all_sprites.add(f_1)
+    damage_group.add(f_1)
+    all_sprites.add(f_2)
+    damage_group.add(f_2)
+    all_sprites.add(f_3)
+    damage_group.add(f_3)
+    all_sprites.add(f_4)
+    damage_group.add(f_4)
+    all_sprites.add(f_5)
+    damage_group.add(f_5)
+    all_sprites.add(f_6)
+    damage_group.add(f_6)
 
     def boss_fight():
         pygame.draw.rect(screen, (255, 0, 0), (100, 10, main_boss.hp, 30))
+        if timer > 175:
+            fire_attack_1()
+
+    def fire_attack_1():
+        f_1.rect = f_1.rect.move(0, 3)
+        f_2.rect = f_2.rect.move(0, 3)
+        f_3.rect = f_3.rect.move(0, 3)
+        f_4.rect = f_4.rect.move(0, 3)
+        f_5.rect = f_5.rect.move(0, 3)
+        f_6.rect = f_6.rect.move(0, 3)
 
     while running:
+        timer += 1
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                print(player.hp)
                 running = False
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_w:
@@ -195,6 +233,12 @@ def level_1_1():
             sword.kill()
             stick.kill()
             main_boss.kill()
+            f_1.kill()
+            f_2.kill()
+            f_3.kill()
+            f_4.kill()
+            f_5.kill()
+            f_6.kill()
 
         def kill_weapon():
             sword.kill()
@@ -203,16 +247,22 @@ def level_1_1():
         bg = pygame.transform.scale(bg, (800, 400))
         screen.blit(bg, (0, 0))
         if player.select_sword:
-            boss_fight()
             weapon = "sword"
+            boss_fight()
             kill_weapon()
         if player.select_stick:
             weapon = "stick"
             boss_fight()
             kill_weapon()
-        if main_boss.hp == 0:
-            running = False
+        if player.hp <= 0:
+            screen.fill((255, 0, 0))
             kill_sprites()
+            running = False
+            end_screen("lose")
+        if main_boss.hp <= 0:
+            screen.fill((255, 0, 0))
+            kill_sprites()
+            running = False
             end_screen("win")
         main_boss.animation()
         all_sprites.draw(screen)
@@ -253,6 +303,7 @@ def end_screen(game_state):
     running = True
     font = pygame.font.SysFont('Calibri', 22)
     if game_state == "win":
+        s2.stop()
         while running:
             screen.fill((0, 0, 0))
             for event in pygame.event.get():
@@ -264,6 +315,28 @@ def end_screen(game_state):
                         running = False
             screen.fill((0, 0, 0))
             title = font.render('Поздравляем, вы выиграли!', True, (255, 255, 255))
+            start_button = font.render('Нажите пробел, чтобы начать игру заново', True, (255, 255, 255))
+            screen.blit(title,
+                        (screen.get_width() / 2 - title.get_width() / 2,
+                         screen.get_height() / 2 - title.get_height() / 2))
+            screen.blit(start_button, (
+                screen.get_width() / 2 - start_button.get_width() / 2,
+                screen.get_height() / 2 + start_button.get_height() / 2))
+            pygame.display.update()
+    if game_state == "lose":
+        s2.stop()
+        while running:
+            screen.fill((0, 0, 0))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                    break
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_SPACE:
+                        switch_level(level_1())
+                        running = False
+            screen.fill((0, 0, 0))
+            title = font.render('К сожалению, вы Проиграли:(', True, (255, 255, 255))
             start_button = font.render('Нажите пробел, чтобы начать игру заново', True, (255, 255, 255))
             screen.blit(title,
                         (screen.get_width() / 2 - title.get_width() / 2,

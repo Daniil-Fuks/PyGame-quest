@@ -14,6 +14,7 @@ player_sprite = pygame.sprite.Group()
 stick_group = pygame.sprite.Group()
 sword_group = pygame.sprite.Group()
 npc_group = pygame.sprite.Group()
+damage_group = pygame.sprite.Group()
 
 
 def load_image(name, colorkey=None):
@@ -43,6 +44,7 @@ class Player(pygame.sprite.Sprite):
         self.rect.y = y
         self.vx = 0
         self.vy = 0
+        self.hp = 100
         self.select_level_1_3 = False
         self.select_level_1_2 = False
         self.select_level_1_1 = False
@@ -58,6 +60,8 @@ class Player(pygame.sprite.Sprite):
         if pygame.sprite.spritecollideany(self, trees) or pygame.sprite.spritecollideany(self, npc_group):
             self.vx = 0
             self.vy = 0
+        if pygame.sprite.spritecollideany(self, damage_group):
+            self.hp -= 100
         if pygame.sprite.spritecollideany(self, portal_1):
             self.select_level_1_1 = True
         if pygame.sprite.spritecollideany(self, portal_2):
@@ -175,6 +179,15 @@ class Portal(pygame.sprite.Sprite):
     def __init__(self, s1, s2, x, y):
         super().__init__(all_sprites)
         self.image = load_image("portal.png")
+        self.image = pygame.transform.scale(self.image, (s1, s2))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+class FireBall(pygame.sprite.Sprite):
+    def __init__(self, s1, s2, x, y):
+        super().__init__(all_sprites)
+        self.image = load_image("Fire ball.png")
         self.image = pygame.transform.scale(self.image, (s1, s2))
         self.rect = self.image.get_rect()
         self.rect.x = x
