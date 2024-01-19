@@ -3,8 +3,7 @@ import sys
 import pygame
 
 from sprites import Player, FirstNpc, Border, Tree, Bush, Portal, Boss, Stick, Sword, FireBall, FireBallLeft
-from sprites import player_sprite, trees, npc_group, portal_1, portal_2, portal_3, all_sprites, sword_group, \
-    stick_group, damage_group
+from sprites import player_sprite, trees, npc_group, portal_1, all_sprites, sword_group, stick_group, damage_group
 
 pygame.init()
 pygame.mixer.init()
@@ -14,6 +13,7 @@ s2 = pygame.mixer.Sound("data/Boss fight.mp3")
 size = width, height = 800, 400
 screen = pygame.display.set_mode(size)
 current_level = "start_menu"
+start_time = 0
 
 
 def switch_level(level):
@@ -22,6 +22,8 @@ def switch_level(level):
 
 
 def level_1():
+    global start_time
+    start_time = pygame.time.get_ticks()
     s1.play()
     running = True
     fps = 60
@@ -326,6 +328,8 @@ def start_game():
 
 
 def end_screen(game_state):
+    global start_time
+    end_ticks =pygame.time.get_ticks()
     running = True
     font = pygame.font.SysFont('Calibri', 22)
     if game_state == "win":
@@ -348,6 +352,14 @@ def end_screen(game_state):
             screen.blit(start_button, (
                 screen.get_width() / 2 - start_button.get_width() / 2,
                 screen.get_height() / 2 + start_button.get_height() / 2))
+            timer = (end_ticks - start_time) / 1000
+            time = font.render(f'Квест завершен за: {timer} с.', True, (255, 255, 255))
+            f = open('timer.txt', 'w')
+            f.seek(0)
+            f.write(f'{abs(timer)}')
+            f.close()
+            screen.blit(time, (
+                screen.get_width() / 5 - time.get_width() / 2, screen.get_height() / 7 - time.get_height() / 2))
             pygame.display.update()
     if game_state == "lose":
         s2.stop()
