@@ -329,7 +329,7 @@ def start_game():
 
 def end_screen(game_state):
     global start_time
-    end_ticks =pygame.time.get_ticks()
+    end_ticks = pygame.time.get_ticks()
     running = True
     font = pygame.font.SysFont('Calibri', 22)
     if game_state == "win":
